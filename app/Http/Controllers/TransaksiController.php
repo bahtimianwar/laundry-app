@@ -15,6 +15,13 @@ class TransaksiController extends Controller
         return view('transaksi.index', compact('transaksis'));
     }
 
+    public function create()
+{
+    $pelanggans = \App\Models\Pelanggan::all();
+    $layanans = \App\Models\Layanan::all();
+    return view('transaksi.create', compact('pelanggans', 'layanans'));
+}
+
     public function store(Request $request) {
         // 1. Ambil data layanan untuk tahu harganya
         $layanan = Layanan::findOrFail($request->layanan_id);
