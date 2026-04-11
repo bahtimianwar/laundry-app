@@ -16,26 +16,16 @@ class AuthController extends Controller
     // 2. Fungsi untuk MEMPROSES data saat tombol "Masuk" diklik
     public function login(Request $request)
     {
-        // Validasi: Pastikan email dan password tidak kosong
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
+    $credentials = $request->only('email', 'password');
 
-        // Cek kecocokan dengan database tabel 'users'
-        if (Auth::attempt($credentials)) {
-            // Kalau cocok: Buat sesi baru (biar aman) lalu pindah ke halaman utama
-            $request->session()->regenerate();
-            
-            // Catatan: '/transaksi' bisa diganti sesuai URL halaman utama/dashboard kalian nanti
-            return redirect()->intended('/transaksi'); 
-        }
-
-        // Kalau gagal: Tendang balik ke halaman login dan kirim pesan error
-        return back()->withErrors([
-            'email' => 'Email atau password yang Anda masukkan salah.',
-        ])->onlyInput('email'); // Biar user nggak perlu ketik ulang emailnya
+    if (Auth::attempt($credentials)) {
+        // Kalau sukses, kirim ke dashboard
+        return redirect()->intended('dashboard');
     }
+
+    // Kalau gagal, balikkan ke login dengan error
+    return back()->withErrors(['email' => 'Email atau password salah!']);
+}
 
     // 3. Fungsi untuk LOGOUT (Keluar)
     public function logout(Request $request)
