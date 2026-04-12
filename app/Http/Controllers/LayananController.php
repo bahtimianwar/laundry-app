@@ -11,13 +11,17 @@ class LayananController extends Controller
         return view('layanan.index', compact('layanans'));
     }
 
+    public function create()
+{
+    return view('layanan.create');
+}
     public function store(Request $request) {
         $request->validate([
             'nama_layanan' => 'required',
             'harga_perkg' => 'required|numeric',
         ]);
+        \App\Models\Layanan::create($request->all());
 
-        Layanan::create($request->all());
-        return redirect()->route('layanan.index');
+    return redirect()->route('layanan.index')->with('success', 'Layanan baru berhasil ditambah!');
     }
 }
