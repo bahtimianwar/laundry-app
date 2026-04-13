@@ -63,4 +63,16 @@ public function show($id)
     $transaksi = \App\Models\Transaksi::with(['pelanggan', 'layanan'])->findOrFail($id);
     return view('transaksi.show', compact('transaksi'));
 }
+public function updateStatus($id, Request $request)
+{
+    $transaksi = \App\Models\Transaksi::findOrFail($id);
+    
+    // Kita update statusnya berdasarkan input yang dikirim
+    $transaksi->update([
+        'status' => $request->status
+    ]);
+
+    return redirect()->back()->with('success', 'Status transaksi berhasil diperbarui!');
+}
+
 }

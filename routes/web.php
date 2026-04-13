@@ -20,6 +20,8 @@ Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
 // Memproses logout (Method POST)
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::patch('/transaksi/{id}/status', [TransaksiController::class, 'updateStatus'])->name('transaksi.updateStatus');
+
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('pelanggan', PelangganController::class);
