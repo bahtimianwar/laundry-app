@@ -53,7 +53,7 @@
         </tr>
         @endforeach
     </tbody>
-</table>
+</table>php
     </div>
 </div>
 @endsection
