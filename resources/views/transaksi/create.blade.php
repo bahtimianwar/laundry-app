@@ -10,24 +10,38 @@
             <div class="card-body">
                 <form action="{{ route('transaksi.store') }}" method="POST">
     @csrf
-    <label>Pilih Pelanggan</label>
-    <select name="pelanggan_id" class="form-control" required>
-        @foreach($pelanggans as $p)
-            <option value="{{ $p->id }}">{{ $p->nama_pelanggan }}</option>
-        @endforeach
-    </select>
+    <div class="card card-custom p-4">
+        <h5>Input Transaksi Baru</h5>
+        <hr>
+        <div class="mb-3">
+            <label>Nama Pelanggan</label>
+            <input type="text" name="nama_pelanggan" class="form-control" placeholder="Masukkan nama..." required>
+        </div>
+        <div class="mb-3">
+            <label>Nomor HP</label>
+            <input type="text" name="nomor_hp" class="form-control" placeholder="08xxxx..." required>
+        </div>
+        
+        <div class="mb-3">
+            <label class="fw-bold">Alamat Pelanggan</label>
+            <textarea name="alamat" class="form-control" rows="3" placeholder="Masukkan alamat..." required></textarea>
+        </div>
+        <div class="mb-3">
+            <label>Layanan</label>
+            <select name="layanan_id" class="form-control" required>
+                @foreach($layanans as $l)
+                    <option value="{{ $l->id }}">{{ $l->nama_layanan }} - Rp {{ number_format($l->harga_perkg) }}</option>
+                @endforeach
+            </select>
+        </div>
+        
+        <div class="mb-3">
+            <label>Berat (Kg)</label>
+            <input type="number" name="berat" class="form-control" step="0.1" required>
+        </div>
 
-    <label>Pilih Layanan</label>
-    <select name="layanan_id" class="form-control" required>
-        @foreach($layanans as $l)
-            <option value="{{ $l->id }}">{{ $l->nama_layanan }} (Rp {{ $l->harga_perkg }}/kg)</option>
-        @endforeach
-    </select>
-
-    <label>Berat (Kg)</label>
-    <input type="number" step="0.01" name="berat" class="form-control" required>
-
-    <button type="submit" class="btn btn-primary mt-3">Buat Nota</button>
+        <button type="submit" class="btn btn-primary">Simpan Transaksi</button>
+    </div>
 </form>
             </div>
         </div>

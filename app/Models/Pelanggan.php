@@ -14,4 +14,4 @@ class Pelanggan extends Model
         'nomor_hp',
         'alamat',
     ];
-}
+}   

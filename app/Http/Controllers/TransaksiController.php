@@ -24,22 +24,40 @@ class TransaksiController extends Controller
 
 public function store(Request $request)
 {
+    // 1. Validasi ditambahin field alamat
+    $request->validate([
+        'nama_pelanggan' => 'required',
+        'nomor_hp' => 'required',
+        'alamat' => 'required', // Tambahin validasi alamat
+        'layanan_id' => 'required',
+        'berat' => 'required|numeric'
+    ]);
+
+    // 2. Simpan/Dapatkan data pelanggan
+    // Kalau HP belum ada, dia buat baru pake nama & alamat dari input
+    $pelanggan = \App\Models\Pelanggan::firstOrCreate(
+        ['nomor_hp' => $request->nomor_hp],
+        [
+            'nama_pelanggan' => $request->nama_pelanggan, 
+            'alamat' => $request->alamat // Alamat masuk ke sini
+        ]
+    );
+
+    // 3. Logika hitung harga & simpan transaksi tetep sama
     $layanan = \App\Models\Layanan::findOrFail($request->layanan_id);
-    
-    // Rumus: Berat x Harga per Kg
-    $total_harga = $request->berat * $layanan->harga_perkg; 
+    $total_harga = $layanan->harga_perkg * $request->berat;
 
     \App\Models\Transaksi::create([
-        'pelanggan_id' => $request->pelanggan_id,
+        'pelanggan_id' => $pelanggan->id,
         'layanan_id' => $request->layanan_id,
         'berat' => $request->berat,
         'total_harga' => $total_harga,
-        'status' => 'proses' // Default awal
+        'status' => 'proses'
     ]);
 
-    return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil dibuat!');
-}
-    public function show($id)
+    return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil dicatat! 🔥');
+}    
+public function show($id)
 {
     // Ambil data transaksi beserta relasi pelanggan & layanannya
     $transaksi = \App\Models\Transaksi::with(['pelanggan', 'layanan'])->findOrFail($id);

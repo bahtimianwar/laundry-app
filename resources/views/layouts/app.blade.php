@@ -63,20 +63,24 @@
                 <i class="fas fa-tshirt me-2"></i> e-Laundry
             </div>
             <div class="list-group list-group-flush my-3">
-                <a href="{{ route('dashboard') }}" class="list-group-item list-group-item-action">
+                <a href="{{ route('dashboard') }}" class="list-group-item list-group-item-action {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                     <i class="fas fa-home me-2"></i> Dashboard
                 </a>
-                <a href="{{ route('pelanggan.index') }}" class="list-group-item list-group-item-action">
+
+                <a href="{{ route('transaksi.index') }}" class="list-group-item list-group-item-action {{ request()->routeIs('transaksi.*') ? 'active' : '' }}">
+                    <i class="fas fa-shopping-cart me-2"></i> Transaksi
+                </a>
+
+                <a href="{{ route('pelanggan.index') }}" class="list-group-item list-group-item-action {{ request()->routeIs('pelanggan.*') ? 'active' : '' }}">
                     <i class="fas fa-users me-2"></i> Pelanggan
                 </a>
-                <a href="{{ route('layanan.index') }}" class="list-group-item list-group-item-action">
+
+                <a href="{{ route('layanan.index') }}" class="list-group-item list-group-item-action {{ request()->routeIs('layanan.*') ? 'active' : '' }}">
                     <i class="fas fa-list me-2"></i> Layanan
-                </a>
-                <a href="{{ route('transaksi.index') }}" class="list-group-item list-group-item-action">
-                    <i class="fas fa-shopping-cart me-2"></i> Transaksi
                 </a>
             </div>
         </div>
+
         <div id="page-content-wrapper">
             <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 px-4 shadow-sm mb-4">
                 <div class="d-flex align-items-center">
@@ -108,6 +112,7 @@
                     </ul>
                 </div>
             </nav>
+
             <div class="container-fluid px-4">
                 @if(session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">

@@ -11,7 +11,7 @@
         <table class="table table-hover">
             <thead class="table-dark">
                 <tr>
-                    <th>Tgl Masuk</th>
+                    <th>Tanggal Masuk</th>
                     <th>Pelanggan</th>
                     <th>Total Harga</th>
                     <th>Status</th>
