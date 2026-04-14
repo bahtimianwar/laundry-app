@@ -6,9 +6,9 @@ use App\Http\Controllers\LayananController;
 use App\Http\Controllers\TransaksiController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
+Route::get('/', function () {
+    return view('welcome');
+});;
 
 // Menampilkan form login (Method GET)
 // middleware('guest') artinya halaman ini cuma bisa dibuka kalau user BELUM login

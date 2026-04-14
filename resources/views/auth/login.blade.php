@@ -3,54 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Sistem Laundry</title>
+    <title>Login - Sistem Laundry Modern</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        body { background-color: #f4f6f9; }
-        .login-card { border-radius: 15px; border: none; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            /* Gradient Background yang menyegarkan */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+            padding: 15px;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .login-header {
+            background: #fff;
+            padding: 40px 30px 20px;
+            text-align: center;
+        }
+
+        .icon-box {
+            width: 80px;
+            height: 80px;
+            background: #eef2ff;
+            color: #4f46e5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            font-size: 30px;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            background-color: #f8fafc;
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            border-color: #4f46e5;
+        }
+
+        .btn-login {
+            background: linear-gradient(to right, #4f46e5, #764ba2);
+            border: none;
+            border-radius: 10px;
+            padding: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            color: white;
+        }
+
+        .btn-login:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 70, 229, 0.4);
+            color: white;
+        }
+
+        .input-group-text {
+            background-color: #f8fafc;
+            border-right: none;
+            border-radius: 10px 0 0 10px;
+        }
+
+        .form-control-with-icon {
+            border-left: none;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .footer-text {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-center align-items-center" style="min-height: 100vh;">
-            <div class="col-md-5">
-                <div class="card shadow login-card">
-                    <div class="card-body p-5">
-                        <h3 class="text-center mb-4 fw-bold text-primary">Laundry App</h3>
-                        <p class="text-center text-muted mb-4">Silakan login untuk mengelola transaksi</p>
 
-                        @if(session('error'))
-                            <div class="alert alert-danger text-center">
-                                {{ session('error') }}
-                            </div>
-                        @endif
+<div class="login-container">
+    <div class="card login-card">
+        <div class="login-header">
+            <div class="icon-box">
+                <i class="fas fa-tshirt"></i>
+            </div>
+            <h3 class="fw-bold text-dark m-0">Laundry<span class="text-primary">App</span></h3>
+            <p class="text-muted small mt-2">Kelola cucian pelanggan dengan mudah</p>
+        </div>
 
-                        <form action="{{ route('login') }}" method="POST">
-                            @csrf <div class="mb-3">
-                                <label for="email" class="form-label">Alamat Email</label>
-                                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" placeholder="Masukkan email" required autofocus>
-                                
-                                @error('email')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="mb-4">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Masukkan password" required>
-                                
-                                @error('password')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">Masuk</button>
-                        </form>
-
-                    </div>
+        <div class="card-body px-4 pb-5">
+            @if(session('error'))
+                <div class="alert alert-danger border-0 small text-center mb-4">
+                    <i class="fas fa-exclamation-circle me-1"></i> {{ session('error') }}
                 </div>
+            @endif
+
+            <form action="{{ route('login') }}" method="POST">
+                @csrf
+                
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">Alamat Email</label>
+                    <div class="input-group">
+                        <span class="input-group-text text-muted"><i class="fas fa-envelope"></i></span>
+                        <input type="email" name="email" 
+                               class="form-control form-control-with-icon @error('email') is-invalid @enderror" 
+                               placeholder="nama@email.com" 
+                               value="{{ old('email') }}" required autofocus>
+                    </div>
+                    @error('email')
+                        <div class="text-danger x-small mt-1" style="font-size: 0.75rem;">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label small fw-bold">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text text-muted"><i class="fas fa-lock"></i></span>
+                        <input type="password" name="password" 
+                               class="form-control form-control-with-icon @error('password') is-invalid @enderror" 
+                               placeholder="Masukkan password" required>
+                    </div>
+                    @error('password')
+                        <div class="text-danger x-small mt-1" style="font-size: 0.75rem;">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="remember">
+                        <label class="form-check-label small text-muted" for="remember">Ingat saya</label>
+                    </div>
+                    <a href="#" class="text-decoration-none small fw-bold text-primary">Lupa Password?</a>
+                </div>
+
+                <button type="submit" class="btn btn-login w-100 mb-3">
+                    Masuk Sekarang <i class="fas fa-arrow-right ms-2"></i>
+                </button>
+            </form>
+
+            <div class="text-center mt-4">
+                <p class="footer-text">&copy; 2024 Laundry App v2.0. All rights reserved.</p>
             </div>
         </div>
     </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
