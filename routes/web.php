@@ -7,8 +7,8 @@ use App\Http\Controllers\TransaksiController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
-});;
+    return view('auth.login');
+});
 
 // Menampilkan form login (Method GET)
 // middleware('guest') artinya halaman ini cuma bisa dibuka kalau user BELUM login
