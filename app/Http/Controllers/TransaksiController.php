@@ -22,29 +22,57 @@ class TransaksiController extends Controller
     return view('transaksi.create', compact('pelanggans', 'layanans'));
 }
 
-    public function store(Request $request) {
-        // 1. Ambil data layanan untuk tahu harganya
-        $layanan = Layanan::findOrFail($request->layanan_id);
-        
-        // 2. Hitung Total Harga (Berat x Harga per KG)
-        $total_harga = $request->berat_laundry * $layanan->harga_perkg;
+public function store(Request $request)
+{
+    // 1. Validasi ditambahin field alamat
+    $request->validate([
+        'nama_pelanggan' => 'required',
+        'nomor_hp' => 'required',
+        'alamat' => 'required', // Tambahin validasi alamat
+        'layanan_id' => 'required',
+        'berat' => 'required|numeric'
+    ]);
 
-        // 3. Simpan ke tabel Transaksi
-        $transaksi = Transaksi::create([
-            'pelanggan_id' => $request->pelanggan_id,
-            'tgl_masuk' => now(), // Otomatis tanggal hari ini
-            'status_laundry' => 'proses',
-            'total_harga' => $total_harga,
-        ]);
+    // 2. Simpan/Dapatkan data pelanggan
+    // Kalau HP belum ada, dia buat baru pake nama & alamat dari input
+    $pelanggan = \App\Models\Pelanggan::firstOrCreate(
+        ['nomor_hp' => $request->nomor_hp],
+        [
+            'nama_pelanggan' => $request->nama_pelanggan, 
+            'alamat' => $request->alamat // Alamat masuk ke sini
+        ]
+    );
 
-        // 4. Simpan ke tabel Detail Transaksi
-        DetailTransaksi::create([
-            'transaksi_id' => $transaksi->id,
-            'layanan_id' => $layanan->id,
-            'berat_laundry' => $request->berat_laundry,
-            'subtotal_harga' => $total_harga,
-        ]);
+    // 3. Logika hitung harga & simpan transaksi tetep sama
+    $layanan = \App\Models\Layanan::findOrFail($request->layanan_id);
+    $total_harga = $layanan->harga_perkg * $request->berat;
 
-        return redirect()->route('transaksi.index')->with('success', 'Transaksi Berhasil!');
-    }
+    \App\Models\Transaksi::create([
+        'pelanggan_id' => $pelanggan->id,
+        'layanan_id' => $request->layanan_id,
+        'berat' => $request->berat,
+        'total_harga' => $total_harga,
+        'status' => 'proses'
+    ]);
+
+    return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil dicatat! 🔥');
+}    
+public function show($id)
+{
+    // Ambil data transaksi beserta relasi pelanggan & layanannya
+    $transaksi = \App\Models\Transaksi::with(['pelanggan', 'layanan'])->findOrFail($id);
+    return view('transaksi.show', compact('transaksi'));
+}
+public function updateStatus($id, Request $request)
+{
+    $transaksi = \App\Models\Transaksi::findOrFail($id);
+    
+    // Kita update statusnya berdasarkan input yang dikirim
+    $transaksi->update([
+        'status' => $request->status
+    ]);
+
+    return redirect()->back()->with('success', 'Status transaksi berhasil diperbarui!');
+}
+
 }
